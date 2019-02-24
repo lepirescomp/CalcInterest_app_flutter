@@ -1,4 +1,4 @@
-#Sun Feb 24 16:39:29 BRT 2019
-base.0=/home/leticia/AndroidStudioProjects/calculator_interest/build/app/intermediates/transforms/dexMerger/debug/0
+#Sun Feb 24 18:52:18 BRT 2019
+base.0=/home/leticia/AndroidStudioProjects/calculator_interest/CalcInterest_app_flutter/build/app/intermediates/transforms/dexMerger/debug/0
 path.0=classes.dex
 renamed.0=classes.dex
