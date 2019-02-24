@@ -21,9 +21,21 @@ class SIForm extends StatefulWidget {
 }
 
 class _SIFormState extends State<SIForm> {
-  var _moedas = ['Dollars','Euros','Libras'];
+  var _moedas = ['Dollar','Euros','Libras'];
   final _minPadding =5.0;
   String texto='';
+  var _textoSelected='' ;
+  TextEditingController principalController = TextEditingController();
+  TextEditingController rateController = TextEditingController();
+  TextEditingController termController = TextEditingController();
+
+
+  @override
+  void initState() {
+    super.initState();
+    _textoSelected =_moedas[0];
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +57,10 @@ class _SIFormState extends State<SIForm> {
             child: TextField(
               style: textStyle,
               onChanged: (String value){
-                setState(() {
-                  texto=value;
-                });
+
               },
               keyboardType: TextInputType.numberWithOptions(),
+              controller: principalController,
               decoration: InputDecoration(
                 labelText: 'Principal',
                 labelStyle: textStyle,
@@ -65,6 +76,7 @@ class _SIFormState extends State<SIForm> {
             child: TextField(
               style: textStyle,
               keyboardType: TextInputType.numberWithOptions(),
+              controller: rateController,
               decoration: InputDecoration(
                   labelText: 'Rate of Interest',
                   labelStyle: textStyle,
@@ -82,6 +94,7 @@ class _SIFormState extends State<SIForm> {
             Expanded(
               child: TextField(
               keyboardType: TextInputType.numberWithOptions(),
+              controller: termController,
               decoration: InputDecoration(
                 labelStyle: textStyle,
                   labelText: 'Term',
@@ -106,9 +119,9 @@ class _SIFormState extends State<SIForm> {
                 );
               }
             ).toList(),
-            value:'Dollars',
+            value: _textoSelected,
             onChanged: (String newValueSelected){
-
+              _onDropDownItemSelected(newValueSelected);
             },
             ),
           )
@@ -127,7 +140,9 @@ class _SIFormState extends State<SIForm> {
                   textColor: Theme.of(context).primaryColorDark,
                   child: Text('Calculate',textScaleFactor: 1.5),
                   onPressed: (){
-
+                      setState(() {
+                       this.texto= calculateTotalreturns();
+                      });
                   },
                 ),
               ),
@@ -140,6 +155,9 @@ class _SIFormState extends State<SIForm> {
                     textColor: Theme.of(context).primaryColorLight,
                   child: Text('Reset',textScaleFactor: 1.5),
                   onPressed: (){
+                      setState(() {
+                        _reset();
+                      });
 
                   },
                 ),
@@ -149,7 +167,7 @@ class _SIFormState extends State<SIForm> {
         ),
         Padding(
           padding: EdgeInsets.all(_minPadding*2),
-          child: Text(texto,
+          child: Text(this.texto,
           style: textStyle),
         )
 
@@ -170,6 +188,30 @@ class _SIFormState extends State<SIForm> {
     );
 
   }
+
+  void _onDropDownItemSelected(String newValueSelected){
+    setState(() {
+      this._textoSelected=newValueSelected;
+    });
+  }
+
+  String calculateTotalreturns(){
+    double principal = double.parse(principalController.text);
+    double rate= double.parse(rateController.text);
+    double term = double.parse(termController.text);
+    double totalAmountPayable = principal + (principal *rate+term)/100;
+
+    return "After $term years, your investment will worth $totalAmountPayable $_textoSelected";
+  }
+
+  void _reset(){
+    principalController.text='';
+    rateController.text='';
+    termController.text='';
+    texto='';
+    _textoSelected= _moedas[0];
+  }
+
 }
 
 
